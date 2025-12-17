@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- アプリ名 -->
+    <string name="app_name">Favo</string>
 
-    <style name="Theme.MyApplication" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- メイン画面 -->
+    <string name="no_account">登録アカウント：なし</string>
+    <string name="registered_account">登録アカウント：%1$s</string>
+
+    <!-- 設定画面 -->
+    <string name="account_hint">反応するアカウント名</string>
+    <string name="save">保存</string>
 </resources>
