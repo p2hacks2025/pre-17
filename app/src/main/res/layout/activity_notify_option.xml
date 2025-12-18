@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <!-- タイトル -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="通知設定"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- フラッシュ ON/OFF -->
+    <Switch
+        android:id="@+id/flashSwitch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="フラッシュを点灯する"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <!-- 通知音タイトル -->
+    <TextView
+        android:id="@+id/soundTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="通知音を選択"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/flashSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <!-- 通知音選択 -->
+    <RadioGroup
+        android:id="@+id/soundGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/soundTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/soundLover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恋人"/>
+
+        <RadioButton
+            android:id="@+id/soundOshi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="推し"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/deleteAccountButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="登録を削除"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_red_dark"
+        app:layout_constraintTop_toBottomOf="@id/soundGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

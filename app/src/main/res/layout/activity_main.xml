@@ -21,11 +21,31 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@android:drawable/ic_menu_add"
+        android:background="@android:color/transparent"
         android:contentDescription="追加"
         app:layout_constraintTop_toBottomOf="@id/accountListText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
+
+
+    <ImageButton
+        android:id="@+id/settingButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/gear_normal"
+        android:background="@null"
+        android:contentDescription="設定"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/accountListText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
