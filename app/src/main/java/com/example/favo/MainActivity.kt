@@ -8,7 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
-import android.widget.ImageButton
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -25,13 +25,10 @@ class MainActivity : ComponentActivity() {
         // Android 13+ 通知権限
         requestNotificationPermission()
 
-
         val plusButton = findViewById<View>(R.id.plusButton)
         plusButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-
-
 
         // 通知アクセス権限
         if (!isNotificationServiceEnabled()) {
@@ -45,73 +42,115 @@ class MainActivity : ComponentActivity() {
     }
 
     // ===============================
-    // アカウント一覧表示（安全版）
+    // アカウント一覧表示
     // ===============================
     private fun showAccounts() {
-        val container = findViewById<LinearLayout>(R.id.accountContainer)
-        container.removeAllViews()
+        val containerTop = findViewById<LinearLayout>(R.id.accountContainerTop)
+        val containerBottom = findViewById<LinearLayout>(R.id.accountContainerBottom)
+        containerTop.removeAllViews()
+        containerBottom.removeAllViews()
 
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val accounts =
-            prefs.getStringSet("target_accounts", emptySet()) ?: emptySet()
+        val accounts = prefs.getStringSet("target_accounts", emptySet()) ?: emptySet()
+        val accountList = accounts.toList()
 
-        accounts.forEach { entry ->
-            // entry 例:
-            // "X:Bob"
-            // "X:Bob|content://media/xxx"
+        if (accounts.size >= 4) {
+            // 2列のグリッド表示
+            val numRows = (accountList.size + 1) / 2
 
-            val view = layoutInflater.inflate(
-                R.layout.item_account,
-                container,
-                false
-            )
-
-            val nameText = view.findViewById<TextView>(R.id.accountNameText)
-            val userIcon = view.findViewById<ImageView>(R.id.userIcon)
-            val snsIcon = view.findViewById<ImageView>(R.id.snsIcon)
-
-            // ---------- 分解（超安全） ----------
-            val mainParts = entry.split("|")
-            val base = mainParts[0]              // X:Bob
-            val iconUri = mainParts.getOrNull(1) // null or String
-
-            val baseParts = base.split(":")
-            if (baseParts.size != 2) return@forEach
-
-            val sns = baseParts[0]
-            val name = baseParts[1]
-
-            nameText.text = name
-
-// SNSアイコン
-            snsIcon.setImageResource(
-                if (sns == "LINE") R.drawable.line else R.drawable.x
-            )
-
-// ユーザーアイコン（丸）
-            if (!iconUri.isNullOrEmpty()) {
-                try {
-                    userIcon.visibility = View.VISIBLE
-                    userIcon.setBackground(null)
-                    userIcon.setImageURI(Uri.parse(iconUri))
-                    userIcon.clipToOutline = true
-                } catch (e: Exception) {
-                    userIcon.visibility = View.GONE
+            for (i in 0 until numRows) {
+                val rowLayout = LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
                 }
-            } else {
+
+                // 左のアイテム
+                createAccountView(accountList[i * 2], rowLayout)?.let { view ->
+                    view.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    rowLayout.addView(view)
+                }
+
+                // 右のアイテム
+                if (i * 2 + 1 < accountList.size) {
+                    createAccountView(accountList[i * 2 + 1], rowLayout)?.let { view ->
+                        view.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                        rowLayout.addView(view)
+                    }
+                } else {
+                    // 奇数個の場合、右側にダミーのビューを追加してレイアウトを揃える
+                    val ghostView = layoutInflater.inflate(R.layout.item_account, rowLayout, false)
+                    ghostView.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    ghostView.visibility = View.INVISIBLE
+                    rowLayout.addView(ghostView)
+                }
+
+                if (accountList.size <= 6) {
+                    containerTop.addView(rowLayout)
+                } else {
+                    // 6 items = 3 rows.
+                    if (i < 3) {
+                        containerTop.addView(rowLayout)
+                    } else {
+                        containerBottom.addView(rowLayout)
+                    }
+                }
+            }
+        } else {
+            // 1列のリスト表示
+            accountList.forEachIndexed { index, entry ->
+                val container = if (index < 6) containerTop else containerBottom
+                createAccountView(entry, container)?.let { view ->
+                    container.addView(view)
+                }
+            }
+        }
+    }
+
+    private fun createAccountView(entry: String, parent: ViewGroup): View? {
+        val view = layoutInflater.inflate(R.layout.item_account, parent, false)
+
+        val nameText = view.findViewById<TextView>(R.id.accountNameText)
+        val userIcon = view.findViewById<ImageView>(R.id.userIcon)
+        val snsIcon = view.findViewById<ImageView>(R.id.snsIcon)
+
+        val mainParts = entry.split("|")
+        val base = mainParts[0]
+        val iconUri = mainParts.getOrNull(1)
+
+        val baseParts = base.split(":")
+        if (baseParts.size != 2) return null
+
+        val sns = baseParts[0]
+        val name = baseParts[1]
+
+        nameText.text = name
+
+        snsIcon.setImageResource(
+            if (sns == "LINE") R.drawable.line else R.drawable.x
+        )
+
+        if (!iconUri.isNullOrEmpty()) {
+            try {
+                userIcon.visibility = View.VISIBLE
+                userIcon.setBackground(null)
+                userIcon.setImageURI(Uri.parse(iconUri))
+                userIcon.clipToOutline = true
+            } catch (e: Exception) {
                 userIcon.visibility = View.GONE
             }
-
-
-            // 行クリック → 通知設定画面
-            view.setOnClickListener {
-                val intent = Intent(this, NotifyOptionActivity::class.java)
-                intent.putExtra("account_entry", entry)
-                startActivity(intent)
-            }
-
-            container.addView(view)
+        } else {
+            userIcon.visibility = View.GONE
         }
+
+        view.setOnClickListener {
+            val intent = Intent(this, NotifyOptionActivity::class.java)
+            intent.putExtra("account_entry", entry)
+            startActivity(intent)
+        }
+        return view
     }
 
     // ===============================
@@ -145,14 +184,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
