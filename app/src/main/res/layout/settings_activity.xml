@@ -23,29 +23,78 @@
         android:textSize="16sp"/>
 
 
-    <!-- SNS選択 -->
-    <RadioGroup
-        android:id="@+id/snsGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+    <!-- SNS選択（ボタン＋アイコンを一体化） -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:layout_marginTop="8dp">
 
-        <RadioButton
-            android:id="@+id/radioX"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="X"
-            android:checked="true"/>
+        <!-- 背景 -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:src="@drawable/site_wood"
+            android:scaleType="fitXY"/>
 
-        <RadioButton
-            android:id="@+id/radioLine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LINE"/>
-    </RadioGroup>
+        <!-- SNS 選択 -->
+        <RadioGroup
+            android:id="@+id/snsGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-    <!-- アイコン選択 -->
+            <!-- X セット -->
+            <LinearLayout
+                android:id="@+id/xSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="48dp">
+
+                <RadioButton
+                    android:id="@+id/radioX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:buttonTint="@android:color/white"
+                    android:layout_marginEnd="8dp"/>
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/x"
+                    android:contentDescription="X"/>
+            </LinearLayout>
+
+            <!-- LINE セット -->
+            <LinearLayout
+                android:id="@+id/lineSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <RadioButton
+                    android:id="@+id/radioLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/white"
+                    android:layout_marginEnd="8dp"/>
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/line"
+                    android:contentDescription="LINE"/>
+            </LinearLayout>
+
+        </RadioGroup>
+    </FrameLayout>
+
+
+
     <LinearLayout
         android:id="@+id/iconRow"
         android:layout_width="wrap_content"
