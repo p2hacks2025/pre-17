@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@drawable/background_house">
 
-    <!-- ← 戻る矢印 -->
+    <!-- 木の画像（左寄せ・少し下） -->
+    <ImageView
+        android:id="@+id/woodImage"
+        android:layout_width="250dp"
+        android:layout_height="219dp"
+        android:layout_marginTop="110dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/site_wood"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 戻るボタン -->
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/backButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@null"
         app:srcCompat="@drawable/ic_arrow_back"
-        app:tint="@android:color/black"
+        app:tint="@android:color/white"
         android:contentDescription="戻る"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -27,12 +40,13 @@
         android:text="通知設定"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="@id/backButton"
         app:layout_constraintBottom_toBottomOf="@id/backButton"/>
 
-    <!-- アイコン選択行 -->
+    <!-- アイコン選択 -->
     <LinearLayout
         android:id="@+id/iconRow"
         android:layout_width="wrap_content"
@@ -59,32 +73,36 @@
             android:clipToOutline="true"/>
     </LinearLayout>
 
-    <!-- フラッシュ -->
+    <!-- フラッシュスイッチ -->
     <Switch
         android:id="@+id/flashSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="44dp"
         android:text="フラッシュを点灯する"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/iconRow"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iconRow" />
 
     <!-- 通知音タイトル -->
     <TextView
         android:id="@+id/soundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="通知音を選択"
+        android:layout_marginStart="84dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/flashSwitch"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:text="通知音を選択"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flashSwitch" />
 
-    <!-- 通知音 -->
+    <!-- 通知音 RadioGroup（恋人・推し） -->
     <RadioGroup
         android:id="@+id/soundGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@id/soundTitle"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -92,38 +110,42 @@
             android:id="@+id/soundLover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="恋人"/>
+            android:text="恋人" />
 
         <RadioButton
             android:id="@+id/soundOshi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="推し"/>
+            android:text="推し"
+            android:layout_marginStart="24dp" />
     </RadioGroup>
 
     <!-- 保存ボタン -->
+
+    <!-- 削除ボタン -->
     <Button
         android:id="@+id/saveButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:text="保存"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/soundGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/soundGroup" />
 
-    <!-- 削除ボタン -->
     <Button
         android:id="@+id/deleteAccountButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:text="@string/delete_account"
         android:textColor="@android:color/white"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/saveButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 
