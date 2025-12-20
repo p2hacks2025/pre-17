@@ -12,7 +12,7 @@
         android:id="@+id/accountEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="反応するアカウント名"
+        android:hint="特別な人の名前"
         android:background="@drawable/account_wood"
         android:textColor="@android:color/white"
         android:textColorHint="#CCFFFFFF"
@@ -107,7 +107,7 @@
             android:id="@+id/iconSelectButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/select_icon"/>
+            android:text="アイコンをえらぶ"/>
 
         <ImageView
             android:id="@+id/iconPreview"
@@ -124,7 +124,8 @@
         android:id="@+id/notifyTypeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="通知タイプ"
+        android:text="あなたにとってどんな人？"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         android:layout_marginTop="32dp"/>
 
@@ -138,13 +139,15 @@
             android:id="@+id/radioLover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="恋人"
+            android:text="好きな人"
+            android:textColor="@android:color/white"
             android:checked="true"/>
 
         <RadioButton
             android:id="@+id/radioOshi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:text="推し"/>
     </RadioGroup>
 
@@ -154,6 +157,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="フラッシュを点灯する"
+        android:textColor="@android:color/white"
         android:layout_marginTop="16dp"/>
 
     <!-- 保存 -->
@@ -161,7 +165,7 @@
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="保存"
+        android:text="ほぞん"
         android:layout_marginTop="32dp"/>
 
 </LinearLayout>

@@ -37,7 +37,7 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="通知設定"
+        android:text="せってい"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
@@ -61,7 +61,7 @@
             android:id="@+id/iconSelectButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="アイコンを変更"/>
+            android:text="アイコンをえらぶ"/>
 
         <ImageView
             android:id="@+id/iconPreview"
@@ -81,21 +81,24 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="44dp"
         android:text="フラッシュを点灯する"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iconRow" />
 
     <!-- 通知音タイトル -->
+
+    <!-- 通知音 RadioGroup（恋人・推し） -->
     <TextView
         android:id="@+id/soundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="24dp"
-        android:text="通知音を選択"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:text="あなたにってどんな人？"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/flashSwitch" />
 
-    <!-- 通知音 RadioGroup（恋人・推し） -->
     <RadioGroup
         android:id="@+id/soundGroup"
         android:layout_width="wrap_content"
@@ -110,13 +113,17 @@
             android:id="@+id/soundLover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="恋人" />
+            android:text="好きな人"
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white" />
 
         <RadioButton
             android:id="@+id/soundOshi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="推し"
+            android:textColor="@android:color/white"
+            android:buttonTint="@android:color/white"
             android:layout_marginStart="24dp" />
     </RadioGroup>
 
@@ -128,7 +135,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="保存"
+        android:text="ほぞん"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:backgroundTint="@android:color/holo_red_dark"
-        android:text="@string/delete_account"
+        android:text="登録をけす"
         android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/saveButton"
         app:layout_constraintStart_toStartOf="parent"
