@@ -145,7 +145,7 @@ class LineNotificationService : NotificationListenerService() {
         remoteViews.setTextViewText(R.id.notification_title, "Favo $titleEmoji")
         remoteViews.setTextViewText(R.id.notification_text, "$name から通知があります")
         // 背景画像を設定します。your_background_image を実際のリソース名に置き換えてください。
-        remoteViews.setImageViewResource(R.id.notification_background, R.drawable.ea20251220134424)
+        remoteViews.setImageViewResource(R.id.notification_background, R.drawable.eaa20251220203554)
 
 
         val intent = when (sns) {
