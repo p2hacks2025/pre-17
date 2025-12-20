@@ -47,4 +47,4 @@ LINE、Xとアプリを連携することを頑張りました。
 - Firebase Auth
 
 ### その他開発に使用したツール・サービス
-- Android stdio,Github,ChatGPT,Geminin,Discord,ibisPaintX
+- Android stdio,Github,ChatGPT,Gemini,Discord,ibisPaintX
