@@ -1,27 +1,38 @@
 package com.example.favo
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : ComponentActivity() {
+    private var isLoading = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupSplashScreen(splashScreen)
         // Android 13+ 通知権限
         requestNotificationPermission()
 
@@ -33,6 +44,36 @@ class MainActivity : ComponentActivity() {
         // 通知アクセス権限
         if (!isNotificationServiceEnabled()) {
             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+        }
+    }
+
+    private fun setupSplashScreen(splashScreen: SplashScreen) {
+        splashScreen.setKeepOnScreenCondition { isLoading }
+        // NOTE: This is for demo purposes. In a real app, you'd wait for data to load.
+        Handler(Looper.getMainLooper()).postDelayed({ isLoading = false }, 1500)
+
+        splashScreen.setOnExitAnimationListener { splashScreenProvider ->
+            val splashView = splashScreenProvider.view
+            val contentView = findViewById<View>(android.R.id.content)
+
+            val fadeOut = ObjectAnimator.ofFloat(splashView, "alpha", 1f, 0f).apply {
+                interpolator = AccelerateInterpolator()
+                duration = 400L
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        splashScreenProvider.remove()
+                    }
+                })
+            }
+
+            contentView.alpha = 0f
+            val fadeIn = ObjectAnimator.ofFloat(contentView, "alpha", 0f, 1f).apply {
+                interpolator = AccelerateInterpolator()
+                duration = 400L
+            }
+
+            fadeOut.start()
+            fadeIn.start()
         }
     }
 

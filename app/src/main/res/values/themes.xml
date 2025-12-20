@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- スプラッシュスクリーン -->
+    <style name="Theme.SplashSample" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/android:Theme.Material.Light.NoActionBar</item>
+        <item name="windowSplashScreenBackground">@color/purple_500</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
+    </style>
 
     <style name="Theme.Favo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
