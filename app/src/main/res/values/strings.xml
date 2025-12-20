@@ -7,4 +7,16 @@
 
     <string name="account_hint">反応するアカウント名</string>
     <string name="save">保存</string>
+
+    <string name="select_icon">アイコンを選択（任意）</string>
+
+    <string name="icon_preview">選択したアイコンのプレビュー</string>
+
+    <!-- これを追加 -->
+    <string name="delete_account">登録を削除</string>
+
+    <string name="add_account">追加</string>
+
+
+
 </resources>

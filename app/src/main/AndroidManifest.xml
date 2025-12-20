@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.favo">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera.flash"/>
+    <!-- ===== 権限 ===== -->
 
+    <!-- 通知リスナー -->
+    <uses-permission
+        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+
+    <!-- Android 13+ 通知許可 -->
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- フラッシュ -->
+    <uses-permission
+        android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <!-- ===== アプリ本体 ===== -->
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Favo">
-
-        <activity android:name=".SettingsActivity"/>
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        >
+        <!-- メイン画面 -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- 設定画面-->
+        <!-- アカウント登録画面 -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+
+        <!-- 通知オプション画面 -->
         <activity
             android:name=".NotifyOptionActivity"
             android:exported="false"
-            android:theme="@style/Theme.Favo.ActionBar" />
+             />
 
-
+        <!-- ===== 通知リスナーサービス ===== -->
         <service
             android:name=".LineNotificationService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService"/>
+                <action
+                    android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
 
     </application>
 </manifest>
+
 
 

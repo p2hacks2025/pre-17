@@ -1,5 +1,6 @@
 package com.example.favo
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -7,102 +8,100 @@ import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES
 
 class LineNotificationService : NotificationListenerService() {
 
-    private var lastNotificationKey: String? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d("X_NOTIFY", "NotificationService CREATED")
-    }
+    // ===== 重複防止用 =====
+    private val recentNotifications = mutableMapOf<String, Long>()
+    private val DUPLICATE_INTERVAL = 1500L // 1.5秒
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
-        // ===== 重複防止 =====
-        if (sbn.key == lastNotificationKey) return
-        lastNotificationKey = sbn.key
+        // ===== グループサマリー無視 =====
+        if (
+            sbn.notification.flags and
+            Notification.FLAG_GROUP_SUMMARY != 0
+        ) return
 
-        // X（旧Twitter）以外は無視
-        if (sbn.packageName != "com.twitter.android") return
+        val extras = sbn.notification.extras
+        val title = extras.getCharSequence("android.title")?.toString() ?: ""
+        val text = extras.getCharSequence("android.text")?.toString() ?: ""
 
-        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val targetName = prefs.getString("target_account", "")?.trim() ?: ""
-        val flashEnabled = prefs.getBoolean("flash_enabled", true)
-        val soundType = prefs.getString("sound_type", "lover") ?: "lover"
+        // ===== 通知識別キー =====
+        val uniqueKey = "${sbn.packageName}|$title|$text"
 
-        if (targetName.isEmpty()) {
-            Log.d("X_NOTIFY", "targetName is empty")
+        val now = System.currentTimeMillis()
+        val lastTime = recentNotifications[uniqueKey]
+
+        if (lastTime != null && now - lastTime < DUPLICATE_INTERVAL) {
+            // 🚫 短時間の同一通知 → 無視
             return
         }
 
-        val extras = sbn.notification.extras
-        val title = extras.getCharSequence("android.title")?.toString()?.trim() ?: ""
+        recentNotifications[uniqueKey] = now
 
-        Log.d("X_NOTIFY", "title='$title'")
-        Log.d("X_NOTIFY", "targetName='$targetName'")
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val targets = prefs.getStringSet("target_accounts", emptySet()) ?: return
 
-        // 表示名一致チェック
-        if (!title.equals(targetName, ignoreCase = true)) return
+        for (entry in targets) {
 
-        Log.d("X_NOTIFY", "MATCHED → FAVO NOTIFY")
+            // entry: "X:Bob|uri"
+            val base = entry.split("|")[0]
+            val parts = base.split(":")
+            if (parts.size != 2) continue
 
-        // ========= 🔔 Favoとして通知 =========
-        sendFavoNotification(
-            targetName = targetName,
-            soundType = soundType
-        )
+            val sns = parts[0]
+            val name = parts[1]
 
-        // ========= 🔊 通知音 =========
-        val soundRes = when (soundType) {
-            "oshi" -> R.raw.notification_sound_oshi
-            else -> R.raw.notification_sound_lover
-        }
+            when (sns) {
 
-        MediaPlayer.create(this, soundRes)?.apply {
-            start()
-            setOnCompletionListener { it.release() }
-        }
-
-        // ========= 🔦 フラッシュ =========
-        if (flashEnabled) {
-            try {
-                val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-                val cameraId = cameraManager.cameraIdList.firstOrNull()
-
-                if (cameraId != null) {
-                    cameraManager.setTorchMode(cameraId, true)
-                    Thread {
-                        Thread.sleep(500)
-                        cameraManager.setTorchMode(cameraId, false)
-                    }.start()
+                "X" -> {
+                    if (sbn.packageName != "com.twitter.android") continue
+                    if (!title.equals(name, ignoreCase = true)) continue
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+                "LINE" -> {
+                    if (sbn.packageName != "jp.naver.line.android") continue
+                    if (
+                        !title.contains(name, ignoreCase = true) &&
+                        !text.contains(name, ignoreCase = true)
+                    ) continue
+                }
+
+                else -> continue
             }
+
+            Log.d("FAVO", "MATCHED $sns : $name")
+
+            val soundType =
+                prefs.getString("sound_type_$base", "lover") ?: "lover"
+            val flashEnabled =
+                prefs.getBoolean("flash_$base", true)
+
+            sendFavoNotification(sns)
+            playSound(soundType)
+            if (flashEnabled) flash()
+
+            break
         }
     }
 
     // ===============================
-    // Favo名義で通知を出す処理
+    // Favo通知
     // ===============================
-    private fun sendFavoNotification(
-        targetName: String,
-        soundType: String
-    ) {
+    private fun sendFavoNotification(sns: String) {
 
         val channelId = "favo_notify"
-
         val manager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (SDK_INT >= VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "Favo通知",
@@ -111,15 +110,17 @@ class LineNotificationService : NotificationListenerService() {
             manager.createNotificationChannel(channel)
         }
 
-
-        val iconRes = when (soundType) {
-            "oshi" -> R.drawable.ic_notify_star   // 🌟
-            else -> R.drawable.ic_notify_heart    // 💖
+        val intent = when (sns) {
+            "LINE" -> Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://line.me")
+                setPackage("jp.naver.line.android")
+            }
+            else -> Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://x.com")
+                setPackage("com.twitter.android")
+            }
         }
 
-        val titleEmoji = if (soundType == "oshi") "🌟" else "💖"
-
-        val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
@@ -128,24 +129,46 @@ class LineNotificationService : NotificationListenerService() {
         )
 
         val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(iconRes)
-            .setColor(
-                if (soundType == "oshi") 0xFFFFD700.toInt()
-                else 0xFFE91E63.toInt()
-            )
-            .setContentTitle("Favo $titleEmoji")
-            .setContentText("$targetName から通知があります $titleEmoji")
+            .setSmallIcon(R.drawable.ic_notify_heart)
+            .setContentTitle("Favo")
+            .setContentText("通知があります")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
+
+    // ===============================
+    // 音
+    // ===============================
+    private fun playSound(type: String) {
+        val res =
+            if (type == "oshi")
+                R.raw.notification_sound_oshi
+            else
+                R.raw.notification_sound_lover
+
+        MediaPlayer.create(this, res)?.apply {
+            start()
+            setOnCompletionListener { release() }
+        }
+    }
+
+    // ===============================
+    // フラッシュ
+    // ===============================
+    private fun flash() {
+        try {
+            val cameraManager =
+                getSystemService(CAMERA_SERVICE) as CameraManager
+            val cameraId = cameraManager.cameraIdList.firstOrNull() ?: return
+
+            cameraManager.setTorchMode(cameraId, true)
+            Thread.sleep(400)
+            cameraManager.setTorchMode(cameraId, false)
+        } catch (_: Exception) {
+        }
+    }
 }
-
-
-
-
-
