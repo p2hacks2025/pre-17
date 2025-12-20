@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background_house">
 
     <!-- ← 戻る矢印 -->
     <androidx.appcompat.widget.AppCompatImageButton
@@ -125,3 +126,4 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

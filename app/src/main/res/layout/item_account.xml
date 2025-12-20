@@ -1,29 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
-    app:cardUseCompatPadding="true">
+
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+
+    app:cardBackgroundColor="#66FFFFFF">
+    <!-- ↑ 透明な白（しょぼん玉感） -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- SNSアイコン（左） -->
+        <!-- SNSアイコン -->
         <ImageView
             android:id="@+id/snsIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginEnd="16dp"/>
 
-        <!-- アカウント名（中央） -->
+        <!-- アカウント名 -->
         <TextView
             android:id="@+id/accountNameText"
             android:layout_width="0dp"
@@ -34,17 +36,16 @@
 
         <!-- ユーザーアイコン -->
         <ImageView
-        android:id="@+id/userIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/bg_circle_gray"
-        android:clipToOutline="true"
-        android:scaleType="centerCrop"/>
-
+            android:id="@+id/userIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_circle_gray"
+            android:clipToOutline="true"/>
 
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
 
 
 

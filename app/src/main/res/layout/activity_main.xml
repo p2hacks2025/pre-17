@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background_onlystar">
 
     <!-- アカウント一覧 -->
     <LinearLayout
@@ -14,16 +15,36 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <!-- ＋ボタン -->
-    <androidx.appcompat.widget.AppCompatImageButton
+    <!-- ＋ アカウント追加ボタン（カード） -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/plusButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:srcCompat="@android:drawable/ic_menu_add"
-        android:contentDescription="追加"
-        android:layout_gravity="center_horizontal"
-        android:background="@null"
-        android:layout_marginTop="16dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="#66FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="アカウントを追加"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
+
 

@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- 通常テーマ（すでにあるはず） -->
-    <style name="Theme.Favo" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- 必要なら色など -->
-    </style>
+    <style name="Theme.Favo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-    <!-- ★ 追加：ActionBar ありテーマ -->
-    <style name="Theme.Favo.ActionBar"
-        parent="Theme.MaterialComponents.DayNight.DarkActionBar">
     </style>
 
 </resources>
+
 
 
 

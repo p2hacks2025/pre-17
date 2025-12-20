@@ -25,10 +25,13 @@ class MainActivity : ComponentActivity() {
         // Android 13+ 通知権限
         requestNotificationPermission()
 
-        // ＋ボタン（新規登録）
-        findViewById<ImageButton>(R.id.plusButton).setOnClickListener {
+
+        val plusButton = findViewById<View>(R.id.plusButton)
+        plusButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
+
 
         // 通知アクセス権限
         if (!isNotificationServiceEnabled()) {
