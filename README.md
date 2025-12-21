@@ -46,4 +46,4 @@ favo (ふぁぼ)
 - Jetpack Compose
 
 ### その他開発に使用したツール・サービス
-- Android stdio,Github,ChatGPT,Gemini,Discord,ibisPaintX
+- Android sutdio,Github,ChatGPT,Gemini,Discord,ibisPaintX
